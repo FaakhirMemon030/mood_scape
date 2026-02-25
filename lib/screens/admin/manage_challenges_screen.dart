@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import '../models/challenge_model.dart';
-import '../services/firestore_service.dart';
-import '../widgets/challenge_card.dart';
-import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
-import 'add_challenge_screen.dart';
-import 'edit_challenge_screen.dart';
-
+import 'package:moodscape_app/models/challenge_model.dart';
+import 'package:moodscape_app/services/firestore_service.dart';
+import 'package:moodscape_app/widgets/challenge_card.dart';
+import 'package:moodscape_app/utils/constants.dart';
+import 'package:moodscape_app/utils/helper_functions.dart';
 class ManageChallengesScreen extends StatefulWidget {
   const ManageChallengesScreen({super.key});
 
