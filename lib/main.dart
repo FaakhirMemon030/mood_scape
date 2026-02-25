@@ -1,42 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 import 'screens/splash_screen.dart';
-import 'services/auth_service.dart';
+import 'screens/home_screen.dart';
+import 'screens/auth/login_screen.dart' hide darkTheme;
+import 'screens/admin/admin_home_screen.dart';
+import 'utils/constants.dart';
+import 'utils/themes.dart' hide lightTheme;
 import 'services/notification_service.dart';
-import 'utils/themes.dart';
+import 'services/auth_serivce.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // 🔥 Initialize Firebase
+  // 🔹 Initialize Firebase
   await Firebase.initializeApp();
 
-  // 🔔 Initialize Notifications
+  // 🔹 Initialize Notifications
   await NotificationService().init();
 
-  runApp(const MyApp());
+  runApp(const MoodScopeApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MoodScopeApp extends StatelessWidget {
+  const MoodScopeApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => AuthService()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'MoodScape',
-
-        // 🎨 App Theme
-        theme: AppThemes.lightTheme,
-
-        home: const SplashScreen(),
-      ),
+    return MaterialApp(
+      title: APP_NAME,
+      debugShowCheckedModeBanner: false,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system, // Auto light/dark
+      home: const SplashScreen(),
     );
   }
 }
