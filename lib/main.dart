@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 import 'screens/splash_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/auth/login_screen.dart' hide darkTheme;
-import 'screens/admin/admin_home_screen.dart';
+import 'screens/auth/login_screen.dart' hide lightTheme, darkTheme;
 import 'utils/constants.dart';
-import 'utils/themes.dart' hide lightTheme;
+import 'utils/themes.dart';
 import 'services/notification_service.dart';
-import 'services/auth_serivce.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/user_model.dart';
-import '../services/firestore_service.dart';
-import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
+import 'package:moodscape_app/models/user_model.dart';
+import 'package:moodscape_app/services/firestore_service.dart';
+import 'package:moodscape_app/utils/constants.dart';
+import 'package:moodscape_app/utils/helper_functions.dart';
 
 class ManageUsersScreen extends StatefulWidget {
   const ManageUsersScreen({super.key});

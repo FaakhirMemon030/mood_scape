@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../services/auth_service.dart';
+import 'package:moodscape_app/services/auth_serivce.dart';
 import 'mood_tracker_screen.dart';
 import 'daily_challenges_screen.dart';
 import 'mood_visual_screen.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../models/challenge_model.dart';
-import '../services/firestore_service.dart';
-import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
+import 'package:moodscape_app/models/challenge_model.dart';
+import 'package:moodscape_app/services/firestore_service.dart';
+import 'package:moodscape_app/utils/constants.dart';
+import 'package:moodscape_app/utils/helper_functions.dart';
 
 class EditChallengeScreen extends StatefulWidget {
   final ChallengeModel challenge;
@@ -41,12 +41,27 @@ class _EditChallengeScreenState extends State<EditChallengeScreen> {
     );
 
     try {
-      await _firestoreService.updateChallenge(updatedChallenge);
-      showSnackBar(context, "Challenge updated!",
-          backgroundColor: Colors.green);
+      setState(() => _isLoading = true);
+
+      // 🔹 Convert model to map
+      await _firestoreService.updateChallenge(
+        updatedChallenge.id, // document id
+        updatedChallenge.toMap(), // data map
+      );
+
+      showSnackBar(
+        context,
+        "Challenge updated!",
+        backgroundColor: Colors.green,
+      );
+
       Navigator.pop(context, true); // return true to refresh list
     } catch (e) {
-      showSnackBar(context, e.toString(), backgroundColor: Colors.redAccent);
+      showSnackBar(
+        context,
+        e.toString(),
+        backgroundColor: Colors.redAccent,
+      );
     } finally {
       setState(() => _isLoading = false);
     }

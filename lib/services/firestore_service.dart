@@ -71,6 +71,11 @@ class FirestoreService {
         .toList();
   }
 
+  /// 🔹 Update user fields (e.g., isAdmin, isActive)
+  Future<void> updateUser(String uid, Map<String, dynamic> data) async {
+    await _usersCollection.doc(uid).update(data);
+  }
+
   /// 🔹 Admin: Delete Challenge
   Future<void> deleteChallenge(String challengeId) async {
     await _challengesCollection.doc(challengeId).delete();
