@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/user_model.dart';
-import '../models/challenge_model.dart';
-import '../services/firestore_service.dart';
-import '../widgets/challenge_card.dart';
-import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
-import 'add_challenge_screen.dart'; // Screen for adding new challenge
+import 'package:moodscape_app/models/user_model.dart';
+import 'package:moodscape_app/models/challenge_model.dart';
+import 'package:moodscape_app/services/firestore_service.dart';
+import 'package:moodscape_app/widgets/challenge_card.dart';
+import 'package:moodscape_app/utils/constants.dart';
+import 'package:moodscape_app/utils/helper_functions.dart';
+import 'package:moodscape_app/screens/admin/manage_challenges_screen.dart';
 
 class AdminHomeScreen extends StatefulWidget {
   const AdminHomeScreen({super.key});
@@ -57,7 +57,7 @@ class _AdminHomeScreenState extends State<AdminHomeScreen> {
           // Navigate to Add Challenge Screen
           bool? added = await Navigator.push(
             context,
-            MaterialPageRoute(builder: (_) => const AddChallengeScreen()),
+            MaterialPageRoute(builder: (_) => const ManageChallengesScreen()),
           );
           if (added == true) _loadData();
         },
