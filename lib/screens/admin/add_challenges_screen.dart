@@ -1,8 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import '../models/challenge_model.dart';
-import '../services/firestore_service.dart';
-import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
+import 'package:moodscape_app/models/challenge_model.dart';
+import 'package:moodscape_app/services/firestore_service.dart';
+import 'package:moodscape_app/utils/constants.dart';
+import 'package:moodscape_app/utils/helper_functions.dart';
 
 class AddChallengeScreen extends StatefulWidget {
   const AddChallengeScreen({super.key});
@@ -28,7 +29,7 @@ class _AddChallengeScreenState extends State<AddChallengeScreen> {
       id: "", // Firestore will assign ID
       title: _titleController.text.trim(),
       description: _descriptionController.text.trim(),
-      createdAt: DateTime.now(),
+      createdAt: Timestamp.now(),
     );
 
     try {

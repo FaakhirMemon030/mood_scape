@@ -4,6 +4,9 @@ import 'package:moodscape_app/services/firestore_service.dart';
 import 'package:moodscape_app/widgets/challenge_card.dart';
 import 'package:moodscape_app/utils/constants.dart';
 import 'package:moodscape_app/utils/helper_functions.dart';
+import 'package:moodscape_app/screens/admin/add_challenges_screen.dart';
+import 'package:moodscape_app/screens/admin/edit_challenges_screen.dart';
+
 class ManageChallengesScreen extends StatefulWidget {
   const ManageChallengesScreen({super.key});
 
