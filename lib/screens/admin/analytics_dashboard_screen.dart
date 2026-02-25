@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import '../services/firestore_service.dart';
-import '../utils/constants.dart';
-import '../utils/helper_functions.dart';
+import 'package:moodscape_app/services/firestore_service.dart';
+import 'package:moodscape_app/utils/constants.dart';
+import 'package:moodscape_app/utils/helper_functions.dart';
 
 class AnalyticsDashboardScreen extends StatefulWidget {
   const AnalyticsDashboardScreen({super.key});
@@ -30,9 +30,8 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
   Future<void> _loadAnalytics() async {
     setState(() => _isLoading = true);
 
-    _totalUsers = await _firestoreService.getTotalUsers();
-    _totalChallenges = await _firestoreService.getTotalCompletedChallenges();
-    _weeklyMoodData = await _firestoreService.getWeeklyMoodAverage();
+    _totalUsers = await _firestoreService.getAllUsers();
+    _totalChallenges = await _firestoreService.getDailyChallenges();
     if (_weeklyMoodData.isNotEmpty) {
       _averageMood =
           _weeklyMoodData.reduce((a, b) => a + b) / _weeklyMoodData.length;
