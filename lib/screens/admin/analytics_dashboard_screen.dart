@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:moodscape_app/models/challenge_model.dart';
+import 'package:moodscape_app/models/mood_entry_model.dart';
+import 'package:moodscape_app/models/user_model.dart';
 import 'package:moodscape_app/services/firestore_service.dart';
 import 'package:moodscape_app/utils/constants.dart';
-import 'package:moodscape_app/utils/helper_functions.dart';
 
 class AnalyticsDashboardScreen extends StatefulWidget {
   const AnalyticsDashboardScreen({super.key});
@@ -30,8 +32,25 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
   Future<void> _loadAnalytics() async {
     setState(() => _isLoading = true);
 
-    _totalUsers = await _firestoreService.getAllUsers();
-    _totalChallenges = await _firestoreService.getDailyChallenges();
+    // 🔹 Fetch users
+    List<UserModel> users = await _firestoreService.getAllUsers();
+    _totalUsers = users.length;
+
+    // 🔹 Fetch challenges
+    List<ChallengeModel> challenges =
+        await _firestoreService.getDailyChallenges();
+    _totalChallenges = challenges.length;
+
+    // 🔹 Fetch moods (for simplicity last 7 entries)
+    List<MoodEntryModel> moods = [];
+    for (var user in users) {
+      moods.addAll(await _firestoreService.getUserMoods(user.uid));
+    }
+    moods.sort((a, b) => b.date.compareTo(a.date)); // latest first
+    moods = moods.take(7).toList(); // last 7 entries
+
+    _weeklyMoodData = moods.map((m) => m.value.toDouble()).toList();
+
     if (_weeklyMoodData.isNotEmpty) {
       _averageMood =
           _weeklyMoodData.reduce((a, b) => a + b) / _weeklyMoodData.length;
@@ -67,11 +86,8 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
                     children: [
                       _buildStatCard("Total Users", _totalUsers.toString(),
                           Icons.people, Colors.blue),
-                      _buildStatCard(
-                          "Completed Challenges",
-                          _totalChallenges.toString(),
-                          Icons.check_circle,
-                          Colors.green),
+                      _buildStatCard("Challenges", _totalChallenges.toString(),
+                          Icons.check_circle, Colors.green),
                       _buildStatCard(
                           "Average Mood",
                           _averageMood.toStringAsFixed(1),
@@ -79,9 +95,7 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
                           Colors.deepPurple),
                     ],
                   ),
-
                   const SizedBox(height: 24),
-
                   // 🔹 Weekly Mood Trend Chart
                   const Text(
                     "Weekly Mood Trend",
@@ -90,64 +104,66 @@ class _AnalyticsDashboardScreenState extends State<AnalyticsDashboardScreen> {
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 200,
-                    child: LineChart(
-                      LineChartData(
-                        minY: 0,
-                        maxY: 5,
-                        gridData: FlGridData(
-                          show: true,
-                          drawHorizontalLine: true,
-                          getDrawingHorizontalLine: (value) => FlLine(
-                            color: Colors.grey.shade300,
-                            strokeWidth: 1,
-                          ),
-                        ),
-                        borderData: FlBorderData(
-                          show: true,
-                          border: const Border(
-                            left: BorderSide(color: Colors.grey),
-                            bottom: BorderSide(color: Colors.grey),
-                            top: BorderSide(color: Colors.transparent),
-                            right: BorderSide(color: Colors.transparent),
-                          ),
-                        ),
-                        titlesData: FlTitlesData(
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              getTitlesWidget: (value, meta) {
-                                return Text("Day ${value.toInt() + 1}",
-                                    style: const TextStyle(fontSize: 12));
-                              },
-                              interval: 1,
+                    child: _weeklyMoodData.isEmpty
+                        ? const Center(child: Text("No mood data yet"))
+                        : LineChart(
+                            LineChartData(
+                              minY: 0,
+                              maxY: 5,
+                              gridData: FlGridData(
+                                show: true,
+                                drawHorizontalLine: true,
+                                getDrawingHorizontalLine: (value) => FlLine(
+                                  color: Colors.grey.shade300,
+                                  strokeWidth: 1,
+                                ),
+                              ),
+                              borderData: FlBorderData(
+                                show: true,
+                                border: const Border(
+                                  left: BorderSide(color: Colors.grey),
+                                  bottom: BorderSide(color: Colors.grey),
+                                  top: BorderSide(color: Colors.transparent),
+                                  right: BorderSide(color: Colors.transparent),
+                                ),
+                              ),
+                              titlesData: FlTitlesData(
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    getTitlesWidget: (value, meta) {
+                                      return Text("Day ${value.toInt() + 1}",
+                                          style: const TextStyle(fontSize: 12));
+                                    },
+                                    interval: 1,
+                                  ),
+                                ),
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    interval: 1,
+                                    getTitlesWidget: (value, meta) {
+                                      return Text(value.toInt().toString(),
+                                          style: const TextStyle(fontSize: 12));
+                                    },
+                                  ),
+                                ),
+                              ),
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: _generateMoodSpots(),
+                                  isCurved: true,
+                                  barWidth: 3,
+                                  color: PRIMARY_COLOR, // ✅ fixed
+                                  dotData: FlDotData(show: true),
+                                  belowBarData: BarAreaData(
+                                    show: true,
+                                    color: PRIMARY_COLOR, // ✅ fixed
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              interval: 1,
-                              getTitlesWidget: (value, meta) {
-                                return Text(value.toInt().toString(),
-                                    style: const TextStyle(fontSize: 12));
-                              },
-                            ),
-                          ),
-                        ),
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: _generateMoodSpots(),
-                            isCurved: true,
-                            barWidth: 3,
-                            colors: [PRIMARY_COLOR],
-                            dotData: FlDotData(show: true),
-                            belowBarData: BarAreaData(
-                              show: true,
-                              colors: [PRIMARY_COLOR.withOpacity(0.2)],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                   ),
                 ],
               ),
