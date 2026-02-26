@@ -32,6 +32,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     },
   ];
 
+  get Lottie => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -92,7 +92,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                             spots: _chartData,
                             isCurved: true,
                             barWidth: 3,
-                            colors: [Colors.deepPurple],
+                            color: Colors.deepPurple, // ✅ single Color
                             dotData: FlDotData(show: true),
                           ),
                         ],

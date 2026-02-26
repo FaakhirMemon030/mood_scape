@@ -1,80 +1,147 @@
 import 'package:flutter/material.dart';
-import 'constants.dart';
+import 'package:provider/provider.dart';
+import 'package:moodscape_app/services/auth_serivce.dart';
+import '../../utils/constants.dart';
+import '../home_screen.dart';
+import '../admin/admin_home_screen.dart';
 
-/// 🔹 Light Theme
-final ThemeData lightTheme = ThemeData(
-  primaryColor: PRIMARY_COLOR,
-  scaffoldBackgroundColor: BACKGROUND_COLOR,
-  cardColor: CARD_COLOR,
-  brightness: Brightness.light,
-  appBarTheme: const AppBarTheme(
-    elevation: 0,
-    backgroundColor: PRIMARY_COLOR,
-    foregroundColor: Colors.white,
-    centerTitle: true,
-    titleTextStyle: TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: Colors.white,
-    ),
-  ),
-  floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: ACCENT_COLOR,
-    foregroundColor: Colors.white,
-  ),
-  textTheme: const TextTheme(
-    headline1: TextStyle(
-        fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black87),
-    headline2: TextStyle(
-        fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
-    headline3: TextStyle(
-        fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black87),
-    bodyText1: TextStyle(fontSize: 16, color: Colors.black87),
-    bodyText2: TextStyle(fontSize: 14, color: Colors.black54),
-    caption: TextStyle(fontSize: 12, color: Colors.black45),
-  ),
-  sliderTheme: SliderThemeData(
-    activeTrackColor: PRIMARY_COLOR,
-    thumbColor: PRIMARY_COLOR,
-    overlayColor: PRIMARY_COLOR.withOpacity(0.2),
-  ),
-);
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
 
-/// 🔹 Dark Theme
-final ThemeData darkTheme = ThemeData(
-  primaryColor: PRIMARY_COLOR,
-  scaffoldBackgroundColor: Colors.black,
-  cardColor: Colors.grey.shade900,
-  brightness: Brightness.dark,
-  appBarTheme: const AppBarTheme(
-    elevation: 0,
-    backgroundColor: Colors.black,
-    foregroundColor: PRIMARY_COLOR,
-    centerTitle: true,
-    titleTextStyle: TextStyle(
-      fontSize: 20,
-      fontWeight: FontWeight.bold,
-      color: PRIMARY_COLOR,
-    ),
-  ),
-  floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: PRIMARY_COLOR,
-    foregroundColor: Colors.white,
-  ),
-  textTheme: const TextTheme(
-    headline1: TextStyle(
-        fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
-    headline2: TextStyle(
-        fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
-    headline3: TextStyle(
-        fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
-    bodyText1: TextStyle(fontSize: 16, color: Colors.white70),
-    bodyText2: TextStyle(fontSize: 14, color: Colors.white60),
-    caption: TextStyle(fontSize: 12, color: Colors.white38),
-  ),
-  sliderTheme: SliderThemeData(
-    activeTrackColor: ACCENT_COLOR,
-    thumbColor: ACCENT_COLOR,
-    overlayColor: ACCENT_COLOR.withOpacity(0.2),
-  ),
-);
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: Center(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Image.asset(
+                  'assets/images/logo.png',
+                  height: 120,
+                ),
+                const SizedBox(height: 24),
+                Text(
+                  APP_NAME,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headlineLarge
+                      ?.copyWith(color: PRIMARY_COLOR),
+                ),
+                const SizedBox(height: 32),
+
+                // 🔹 Email
+                TextFormField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: const InputDecoration(
+                    labelText: "Email",
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (val) =>
+                      val!.isEmpty ? "Please enter email" : null,
+                ),
+                const SizedBox(height: 16),
+
+                // 🔹 Password
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: "Password",
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (val) =>
+                      val!.isEmpty ? "Please enter password" : null,
+                ),
+                const SizedBox(height: 24),
+
+                // 🔹 Login Button
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: _isLoading
+                        ? null
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
+                              setState(() => _isLoading = true);
+
+                              bool success = await authService.login(
+                                _emailController.text.trim(),
+                                _passwordController.text.trim(),
+                              );
+
+                              setState(() => _isLoading = false);
+
+                              if (success) {
+                                if (authService.isAdmin) {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) =>
+                                            const AdminHomeScreen()),
+                                  );
+                                } else {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (_) => const HomeScreen()),
+                                  );
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Login failed. Check credentials.")),
+                                );
+                              }
+                            }
+                          },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: PRIMARY_COLOR,
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                    ),
+                    child: _isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : const Text(
+                            "Login",
+                            style: TextStyle(fontSize: 18),
+                          ),
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+
+                // 🔹 Signup Link
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/signup');
+                  },
+                  child: const Text("Don't have an account? Sign up"),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

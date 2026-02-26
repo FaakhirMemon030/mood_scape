@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
 class MoodChart extends StatelessWidget {
-  final List<double> moodData; // List of moods (1-5 scale)
+  final List<double> moodData; // Mood values (1-5)
   final double maxMoodValue;
 
   const MoodChart({
@@ -36,30 +36,6 @@ class MoodChart extends StatelessWidget {
           LineChartData(
             minY: 0,
             maxY: maxMoodValue,
-            titlesData: FlTitlesData(
-              bottomTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  reservedSize: 22,
-                  interval: 1,
-                  getTitlesWidget: (value, meta) => Text(
-                    "Day ${value.toInt() + 1}",
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ),
-              ),
-              leftTitles: AxisTitles(
-                sideTitles: SideTitles(
-                  showTitles: true,
-                  interval: 1,
-                  reservedSize: 28,
-                  getTitlesWidget: (value, meta) => Text(
-                    value.toInt().toString(),
-                    style: const TextStyle(fontSize: 12),
-                  ),
-                ),
-              ),
-            ),
             gridData: FlGridData(
               show: true,
               drawHorizontalLine: true,
@@ -77,20 +53,45 @@ class MoodChart extends StatelessWidget {
                 right: BorderSide(color: Colors.transparent),
               ),
             ),
+            titlesData: const FlTitlesData(
+              // Hide top and right titles for a cleaner look
+              topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: 1,
+                  reservedSize: 30,
+                ),
+              ),
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  interval: 1,
+                  reservedSize: 40,
+                ),
+              ),
+            ),
             lineBarsData: [
               LineChartBarData(
                 spots: spots,
                 isCurved: true,
                 barWidth: 3,
-                colors: [Colors.deepPurple],
+                color: Colors.deepPurple, // Line color
                 dotData: FlDotData(
                   show: true,
-                  dotSize: 4,
-                  dotColor: Colors.deepPurple,
+                  getDotPainter: (spot, percent, barData, index) =>
+                      FlDotCirclePainter(
+                    radius: 4, // Pehle ye dotSize tha
+                    color: Colors.deepPurple, // Pehle ye dotColor tha
+                    strokeWidth: 1,
+                    strokeColor: Colors.white,
+                  ),
                 ),
                 belowBarData: BarAreaData(
                   show: true,
-                  colors: [Colors.deepPurple.withOpacity(0.2)],
+                  // Naye version mein 'colors' ki jagah 'color' ya 'gradient' use hota hai
+                  color: Colors.deepPurple.withOpacity(0.2), 
                 ),
               ),
             ],

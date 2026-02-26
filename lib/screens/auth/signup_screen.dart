@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../services/auth_service.dart';
+import 'package:moodscape_app/services/auth_serivce.dart';
 import '../../services/firestore_service.dart';
 import '../../utils/constants.dart';
 import '../../utils/helper_functions.dart';
@@ -34,33 +34,34 @@ class _SignupScreenState extends State<SignupScreen> {
     final password = _passwordController.text.trim();
 
     try {
-      // 🔹 Detect if admin
-      bool isAdmin =
-          email.toLowerCase() == ADMIN_EMAIL && password == ADMIN_PASSWORD;
-
+      // 🔹 Signup (isAdmin detection handled inside AuthService)
       final uid = await _authService.signup(
         name: name,
         email: email,
         password: password,
-        isAdmin: isAdmin,
       );
 
       if (uid != null) {
-        // 🔹 Save user to Firestore
-        await _firestoreService.setUser(
-          UserModel(
-            uid: uid,
-            name: name,
-            email: email,
-            isAdmin: isAdmin,
-          ),
-        );
-
         showSnackBar(context, "Account created!",
             backgroundColor: Colors.green);
 
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+        // 🔹 Navigate to HomeScreen (or AdminHomeScreen if admin)
+        if (_authService.isAdmin) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (_) =>
+                    const HomeScreen()), // replace with AdminHomeScreen if needed
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (_) => const HomeScreen()),
+          );
+        }
+      } else {
+        showSnackBar(context, "Signup failed!",
+            backgroundColor: Colors.redAccent);
       }
     } catch (e) {
       showSnackBar(context, e.toString(), backgroundColor: Colors.redAccent);
@@ -82,7 +83,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // 🔹 App Logo / Title
-                  Text(APP_NAME, style: Theme.of(context).textTheme.headline1),
+                  Text(APP_NAME,
+                      style: Theme.of(context).textTheme.headlineLarge),
 
                   const SizedBox(height: 48),
 
@@ -112,12 +114,9 @@ class _SignupScreenState extends State<SignupScreen> {
                       prefixIcon: Icon(Icons.email),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null || value.isEmpty)
                         return "Please enter email";
-                      }
-                      if (!isValidEmail(value)) {
-                        return "Invalid email";
-                      }
+                      if (!isValidEmail(value)) return "Invalid email";
                       return null;
                     },
                   ),
@@ -133,9 +132,8 @@ class _SignupScreenState extends State<SignupScreen> {
                       prefixIcon: Icon(Icons.lock),
                     ),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
+                      if (value == null || value.isEmpty)
                         return "Please enter password";
-                      }
                       if (!isValidPassword(value)) {
                         return "Password must be 8+ chars, include uppercase, lowercase, number & special char";
                       }
@@ -180,8 +178,9 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Text(
                           "Login",
                           style: TextStyle(
-                              color: PRIMARY_COLOR,
-                              fontWeight: FontWeight.bold),
+                            color: PRIMARY_COLOR,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       )
                     ],

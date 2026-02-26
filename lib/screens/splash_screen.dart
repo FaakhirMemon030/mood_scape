@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../services/auth_service.dart';
+import 'package:moodscape_app/services/auth_serivce.dart';
 import '../utils/constants.dart';
-import '../utils/themes.dart';
 import 'home_screen.dart';
 import 'auth/login_screen.dart';
-import 'admin_home_screen.dart';
+import 'admin/admin_home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -26,19 +25,24 @@ class _SplashScreenState extends State<SplashScreen> {
   Future<void> _checkLoginStatus() async {
     final user = _authService.currentUser;
     if (user != null) {
-      // 🔹 User logged in, check admin
-      bool isAdmin = await _authService.isAdmin(user.uid);
-      if (isAdmin) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (_) => const AdminHomeScreen()));
+      // 🔹 User logged in, check admin via getter
+      if (_authService.isAdmin) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const AdminHomeScreen()),
+        );
       } else {
         Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
       }
     } else {
       // 🔹 Not logged in
       Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
     }
   }
 
@@ -52,13 +56,13 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             // 🔹 App Logo
             Image.asset(
-              'assets/images/logo.png', // make sure you have your logo here
+              'assets/images/logo.png', // make sure this path exists
               height: 120,
             ),
             const SizedBox(height: 24),
             Text(
               APP_NAME,
-              style: Theme.of(context).textTheme.headline1?.copyWith(
+              style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                     color: Colors.white,
                   ),
             ),

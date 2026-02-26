@@ -3,6 +3,7 @@ import 'constants.dart';
 
 /// 🔹 Light Theme
 final ThemeData lightTheme = ThemeData(
+  useMaterial3: true, // Naye Flutter apps ke liye best hai
   primaryColor: PRIMARY_COLOR,
   scaffoldBackgroundColor: BACKGROUND_COLOR,
   cardColor: CARD_COLOR,
@@ -22,16 +23,17 @@ final ThemeData lightTheme = ThemeData(
     backgroundColor: ACCENT_COLOR,
     foregroundColor: Colors.white,
   ),
+  // ✅ Updated TextTheme (Naye names ke saath)
   textTheme: const TextTheme(
-    headline1: TextStyle(
+    displayLarge: TextStyle(
         fontSize: 26, fontWeight: FontWeight.bold, color: Colors.black87),
-    headline2: TextStyle(
+    titleLarge: TextStyle(
         fontSize: 22, fontWeight: FontWeight.bold, color: Colors.black87),
-    headline3: TextStyle(
+    titleMedium: TextStyle(
         fontSize: 20, fontWeight: FontWeight.w600, color: Colors.black87),
-    bodyText1: TextStyle(fontSize: 16, color: Colors.black87),
-    bodyText2: TextStyle(fontSize: 14, color: Colors.black54),
-    caption: TextStyle(fontSize: 12, color: Colors.black45),
+    bodyLarge: TextStyle(fontSize: 16, color: Colors.black87),
+    bodyMedium: TextStyle(fontSize: 14, color: Colors.black54),
+    labelSmall: TextStyle(fontSize: 12, color: Colors.black45),
   ),
   sliderTheme: SliderThemeData(
     activeTrackColor: PRIMARY_COLOR,
@@ -42,6 +44,7 @@ final ThemeData lightTheme = ThemeData(
 
 /// 🔹 Dark Theme
 final ThemeData darkTheme = ThemeData(
+  useMaterial3: true,
   primaryColor: PRIMARY_COLOR,
   scaffoldBackgroundColor: Colors.black,
   cardColor: Colors.grey.shade900,
@@ -61,16 +64,17 @@ final ThemeData darkTheme = ThemeData(
     backgroundColor: PRIMARY_COLOR,
     foregroundColor: Colors.white,
   ),
+  // ✅ Updated TextTheme (Naye names ke saath)
   textTheme: const TextTheme(
-    headline1: TextStyle(
+    displayLarge: TextStyle(
         fontSize: 26, fontWeight: FontWeight.bold, color: Colors.white),
-    headline2: TextStyle(
+    titleLarge: TextStyle(
         fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
-    headline3: TextStyle(
+    titleMedium: TextStyle(
         fontSize: 20, fontWeight: FontWeight.w600, color: Colors.white),
-    bodyText1: TextStyle(fontSize: 16, color: Colors.white70),
-    bodyText2: TextStyle(fontSize: 14, color: Colors.white60),
-    caption: TextStyle(fontSize: 12, color: Colors.white38),
+    bodyLarge: TextStyle(fontSize: 16, color: Colors.white70),
+    bodyMedium: TextStyle(fontSize: 14, color: Colors.white60),
+    labelSmall: TextStyle(fontSize: 12, color: Colors.white38),
   ),
   sliderTheme: SliderThemeData(
     activeTrackColor: ACCENT_COLOR,
