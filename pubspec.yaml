@@ -1,79 +1,55 @@
-name: moodscape_app
-description: MoodScape - Mood Tracking & Mental Wellness App
-publish_to: 'none'
+name: flutter_
+description: "moodscape_app"
+publish_to: 'none' # Prevent accidental publishing to pub.dev
 
 version: 1.0.0+1
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
+  sdk: ^3.10.3
 
+# ---------------------------
+# Dependencies
+# ---------------------------
 dependencies:
   flutter:
     sdk: flutter
 
-  # ---------------------------
-  # 🔥 FIREBASE CORE
-  # ---------------------------
-  firebase_core: ^3.6.0
-  firebase_auth: ^5.3.0
-  google_sign_in: ^6.2.1
-  cloud_firestore: ^5.4.0
+  # Cupertino icons for iOS style
+  cupertino_icons: ^1.0.8
 
-  # ---------------------------
-  # 🔔 NOTIFICATIONS
-  # ---------------------------
-  flutter_local_notifications: ^17.2.3
-  timezone: ^0.9.4
-
-  # ---------------------------
-  # 📊 CHARTS (User + Admin Analytics)
-  # ---------------------------
-  fl_chart: ^0.68.0
-
-  # ---------------------------
-  # 🎬 ANIMATIONS
-  # ---------------------------
-  lottie: ^3.1.2
-  animated_text_kit: ^4.2.2
-  animations: ^2.0.11
-
-  # ---------------------------
-  # 🎨 UI ENHANCEMENT
-  # ---------------------------
-  smooth_page_indicator: ^1.1.0
-  font_awesome_flutter: ^10.7.0
-  flutter_svg: ^2.0.10+1
-  shimmer: ^3.0.0
-
-  # ---------------------------
-  # 🧠 STATE MANAGEMENT
-  # ---------------------------
-  provider: ^6.1.2
-
-  # ---------------------------
-  # 📅 DATE & FORMATTING
-  # ---------------------------
+  # Core MoodScape dependencies
+  provider: ^6.1.1
+  uuid: ^4.3.3
   intl: ^0.19.0
-
-  # ---------------------------
-  # 🌐 INTERNET CHECK
-  # ---------------------------
-  connectivity_plus: ^6.0.5
-
-  # ---------------------------
-  # 💾 LOCAL STORAGE
-  # ---------------------------
-  shared_preferences: ^2.3.2
+  google_fonts: ^6.1.0
+  flutter_staggered_animations: ^1.0.0 # Premium animations ke liye
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^6.0.0
 
-# flutter:
-#   uses-material-design: true
+# ---------------------------
+# Flutter specific settings
+# ---------------------------
+flutter:
+  uses-material-design: true
 
-#   assets:
-#     - assets/images/
-#     - assets/animations/
-#     - assets/icons/
+  # Assets section (uncomment and add your assets)
+  assets:
+    - assets/images/
+    - assets/animations/
+    - assets/icons/
+
+  # Fonts section (example, add your own fonts here)
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700

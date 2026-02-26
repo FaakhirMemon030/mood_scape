@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '238117498783',
     projectId: 'moodscope-d8db9',
     storageBucket: 'moodscope-d8db9.firebasestorage.app',
+    iosClientId: '238117498783-s1qlfjdeek5ismsjpmq2mtso54irnn3e.apps.googleusercontent.com',
     iosBundleId: 'com.example.moodscapeApp',
   );
 
@@ -72,6 +73,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '238117498783',
     projectId: 'moodscope-d8db9',
     storageBucket: 'moodscope-d8db9.firebasestorage.app',
+    iosClientId: '238117498783-s1qlfjdeek5ismsjpmq2mtso54irnn3e.apps.googleusercontent.com',
     iosBundleId: 'com.example.moodscapeApp',
   );
 

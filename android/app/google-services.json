@@ -12,7 +12,12 @@
           "package_name": "com.example.moodscape_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "238117498783-ooalq4s33d2c34m7kca7d2r7hfivb6bt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAhAduGa9xsHSQDJV6P-e_eHiJcDyJ1XBs"
@@ -20,7 +25,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "238117498783-ooalq4s33d2c34m7kca7d2r7hfivb6bt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "238117498783-s1qlfjdeek5ismsjpmq2mtso54irnn3e.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.moodscapeApp"
+              }
+            }
+          ]
         }
       }
     }
